@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Furkan Koruk | Classic-Core v1.8.1</title>
+    <title>Furkan Koruk | Project Anıtkabir v1.9.0</title>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     
     <style>
-        :root { --neon-blue: #00f2ff; --neon-purple: #bc13fe; --terminal-green: #33ff33; }
+        :root { --neon-blue: #00f2ff; --neon-purple: #bc13fe; --terminal-green: #33ff33; --stone-color: #E0D8B0; }
         body { margin: 0; overflow: hidden; font-family: 'Rajdhani', sans-serif; background: #000; }
 
         /* Sağ HUD Paneli */
@@ -41,13 +41,13 @@
 <body>
 
     <div id="status-display" class="ar-status">
-        SYSTEM: WAITING FOR SIGNAL... <br>
-        <span style="font-size: 0.5rem; color: #fff;">SCAN QR TO DEPLOY CLASSIC CORE</span>
+        SYSTEM: READY FOR DEPLOYMENT <br>
+        <span style="font-size: 0.5rem; color: #fff;">SCAN QR TO CONSTRUCT MONUMENT</span>
     </div>
 
     <div class="version-hud">
-        <div class="version-item"><span>V1.8.0</span><button onclick="openModal('v180')">INFO</button></div>
-        <div class="version-item active"><span>V1.8.1</span><button onclick="openModal('v181')">INFO</button></div>
+        <div class="version-item"><span>V1.8.1</span><button onclick="openModal('v181')">INFO</button></div>
+        <div class="version-item active"><span>V1.9.0</span><button onclick="openModal('v190')">INFO</button></div>
     </div>
 
     <div id="versionModal" class="modal">
@@ -63,29 +63,53 @@
 
         <a-entity id="world-monument" visible="false">
             
-            <a-box position="0 0.7 0" material="color: #00f2ff; opacity: 0.6; transparent: true;" 
-                   animation="property: rotation; to: 0 360 0; loop: true; dur: 5000">
+            <a-entity position="0 0.1 0" scale="0.4 0.4 0.4"> 
                 
-                <a-box position="0 0 0" scale="0.5 0.5 0.5" material="color: #bc13fe; emissive: #bc13fe; emissiveIntensity: 0.5;"></a-box>
-                
-                <a-text value="FURKAN KORUK" position="-0.7 0.8 0" color="#00f2ff" width="3" font="exo2bold"></a-text>
-            </a-box>
-            <a-dodecahedron position="0 0.7 0" radius="1.3" 
-                            material="color: #00f2ff; wireframe: true; transparent: true; opacity: 0.3;"
-                            animation="property: rotation; to: 0 -360 0; loop: true; dur: 25000; easing: linear;">
+                <a-box color="#707070" scale="5 0.4 4" position="0 0.2 0" shadow></a-box>
+                <a-box color="#808080" scale="4.6 0.3 3.6" position="0 0.55 0" shadow></a-box>
+                <a-box color="#909090" scale="4.2 0.3 3.2" position="0 0.85 0" shadow></a-box>
+
+                <a-box color="#E0D8B0" scale="3.5 1.8 2.2" position="0 1.9 0" shadow></a-box>
+
+                <a-box color="#C0B890" scale="3.8 0.3 2.5" position="0 2.95 0" shadow></a-box>
+                <a-box color="#A09870" scale="3.6 0.1 2.3" position="0 3.15 0" shadow></a-box>
+
+                <a-entity position="0 1.9 1.2">
+                    <a-cylinder color="#E0D8B0" height="1.8" radius="0.12" position="-1.5 0 0"></a-cylinder>
+                    <a-cylinder color="#E0D8B0" height="1.8" radius="0.12" position="-0.9 0 0"></a-cylinder>
+                    <a-cylinder color="#E0D8B0" height="1.8" radius="0.12" position="-0.3 0 0"></a-cylinder>
+                    <a-cylinder color="#E0D8B0" height="1.8" radius="0.12" position="0.3 0 0"></a-cylinder>
+                    <a-cylinder color="#E0D8B0" height="1.8" radius="0.12" position="0.9 0 0"></a-cylinder>
+                    <a-cylinder color="#E0D8B0" height="1.8" radius="0.12" position="1.5 0 0"></a-cylinder>
+                </a-entity>
+
+                <a-entity position="0 1.9 -1.2">
+                    <a-cylinder color="#E0D8B0" height="1.8" radius="0.12" position="-1.5 0 0"></a-cylinder>
+                    <a-cylinder color="#E0D8B0" height="1.8" radius="0.12" position="1.5 0 0"></a-cylinder>
+                </a-entity>
+
+                <a-cylinder color="#E0D8B0" height="1.8" radius="0.12" position="-1.6 1.9 0"></a-cylinder>
+                 <a-cylinder color="#E0D8B0" height="1.8" radius="0.12" position="1.6 1.9 0"></a-cylinder>
+
+                <a-text value="FURKAN KORUK" position="0 3.8 0" align="center" color="#00f2ff" width="6" font="exo2bold"
+                        animation="property: opacity; from: 0.7; to: 1; dir: alternate; loop: true; dur: 2000;"></a-text>
+            </a-entity>
+            <a-dodecahedron position="0 1 0" radius="2" 
+                            material="color: #00f2ff; wireframe: true; transparent: true; opacity: 0.2;"
+                            animation="property: rotation; to: 0 -360 0; loop: true; dur: 30000; easing: linear;">
             </a-dodecahedron>
 
-            <a-torus position="0 0.7 0" radius="1.5" radius-tubular="0.02" rotation="90 0 0" material="color: #00f2ff; emissive: #00f2ff;">
-                <a-animation attribute="rotation" to="90 360 0" dur="5000" repeat="indefinite" easing="linear"></a-animation>
+            <a-torus position="0 1.2 0" radius="2.2" radius-tubular="0.02" rotation="90 0 0" material="color: #00f2ff; emissive: #00f2ff;">
+                <a-animation attribute="rotation" to="90 360 0" dur="7000" repeat="indefinite" easing="linear"></a-animation>
             </a-torus>
-            <a-torus position="0 0.7 0" radius="1.4" radius-tubular="0.02" material="color: #bc13fe; emissive: #bc13fe; opacity: 0.7">
-                <a-animation attribute="rotation" to="0 360 0" dur="7000" repeat="indefinite" easing="linear"></a-animation>
+            <a-torus position="0 1.5 0" radius="2" radius-tubular="0.02" material="color: #bc13fe; emissive: #bc13fe; opacity: 0.6">
+                <a-animation attribute="rotation" to="0 360 0" dur="9000" repeat="indefinite" easing="linear"></a-animation>
             </a-torus>
 
-            <a-ring position="0 0.05 0" rotation="-90 0 0" radius-inner="0.5" radius-outer="1.6" material="color: #00f2ff; wireframe: true;"></a-ring>
-            <a-grid position="0 0 0" rotation="-90 0 0" width="3" height="3" color="#bc13fe" opacity="0.4"></a-grid>
+            <a-grid position="0 0 0" rotation="-90 0 0" width="4" height="4" color="#bc13fe" opacity="0.3"></a-grid>
 
-            <a-light type="point" color="#00f2ff" intensity="1.5" position="0 1.5 0"></a-light>
+            <a-light type="point" color="#E0D8B0" intensity="1" position="2 3 2"></a-light>
+            <a-light type="ambient" color="#ffffff" intensity="0.3"></a-light>
 
         </a-entity>
 
@@ -107,7 +131,7 @@
                 monument.object3D.position.copy(lastWorldPosition);
                 monument.object3D.quaternion.copy(lastWorldQuaternion);
                 monument.setAttribute('visible', 'true');
-                statusDisplay.innerHTML = "STATUS: CLASSIC CORE DEPLOYED <br> <span style='color:#33ff33;'>POSITION LOCKED</span>";
+                statusDisplay.innerHTML = "STATUS: ANITKABIR DEPLOYED <br> <span style='color:#33ff33;'>POSITION LOCKED</span>";
             } else if (monument.getAttribute('visible')) {
                 statusDisplay.innerHTML = "STATUS: SIGNAL LOST <br> <span style='color:#ffbc00;'>HOLDING VIRTUAL ANCHOR</span>";
             }
@@ -116,17 +140,20 @@
         updateAR();
 
         const versionData = {
-            'v180': `+--- CYBER VISUALS INTRO ---+`,
-            'v181': `
+            'v181': `+--- CLASSIC CORE HYBRID ---+`,
+            'v190': `
 +---------------------------------------+
-| CLASSIC CORE RETROFIT - v1.8.1        |
+| PROJECT: ANITKABIR MODEL - v1.9.0     |
 +---------------------------------------+
-| [RESTORED] Original Rotating Cubes    |
-| [RESTORED] Attached Name Text         |
-| [KEPT] Outer Cyber-Rings & Shield     |
+| [NEW] Procedural Mausoleum Model      |
+| [NEW] Stone & Marble Color Palette    |
+| [NOTE] Built with code primitives for |
+|        maximum stability (no external |
+|        model files needed).           |
 | [KEPT] World-Space Locking Logic      |
+| [KEPT] Outer Cyber-Defense Rings      |
 +---------------------------------------+
-| STATUS: HYBRID DESIGN ACTIVE          |
+| STATUS: MONUMENT CONSTRUCTED          |
 +---------------------------------------+`
         };
 
