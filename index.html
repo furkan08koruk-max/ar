@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Furkan Koruk | Project Anıtkabir v1.9.0</title>
+    <title>Furkan Koruk | Anıtkabir AR v2.0.0</title>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     
     <style>
-        :root { --neon-blue: #00f2ff; --neon-purple: #bc13fe; --terminal-green: #33ff33; --stone-color: #E0D8B0; }
+        :root { --neon-blue: #00f2ff; --neon-purple: #bc13fe; }
         body { margin: 0; overflow: hidden; font-family: 'Rajdhani', sans-serif; background: #000; }
 
-        /* Sağ HUD Paneli */
+        /* Sağ Taraf Versiyon Paneli */
         .version-hud {
             position: fixed; right: 20px; top: 50%; transform: translateY(-50%);
             z-index: 1000; display: flex; flex-direction: column; gap: 12px;
@@ -23,145 +23,63 @@
             clip-path: polygon(10% 0, 100% 0, 100% 100%, 0% 100%); border: 1px solid rgba(0, 242, 255, 0.2);
         }
         .version-item.active { border-right-color: var(--neon-blue); box-shadow: -5px 0 15px rgba(0, 242, 255, 0.3); }
-        .version-item button { background: #222; border: 1px solid var(--neon-blue); color: var(--neon-blue); cursor: pointer; font-size: 0.5rem; margin-left: 5px; }
 
-        /* AR Durum Paneli */
+        /* Üst Durum Çubuğu */
         .ar-status {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000;
             background: rgba(0,0,0,0.8); color: var(--neon-blue); padding: 10px 20px; border: 1px solid var(--neon-blue);
-            font-family: 'Orbitron'; font-size: 0.7rem; text-align: center; min-width: 280px;
+            font-family: 'Orbitron'; font-size: 0.7rem; text-align: center; min-width: 250px;
         }
-
-        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); }
-        .modal-content { background: #050505; margin: 15% auto; padding: 25px; border: 1px solid var(--neon-blue); width: 85%; max-width: 500px; }
-        .ascii-table { color: var(--terminal-green); font-family: 'Courier New', monospace; white-space: pre-wrap; font-size: 0.75rem; }
     </style>
 </head>
 
 <body>
 
-    <div id="status-display" class="ar-status">
-        SYSTEM: READY FOR DEPLOYMENT <br>
-        <span style="font-size: 0.5rem; color: #fff;">SCAN QR TO CONSTRUCT MONUMENT</span>
+    <div class="ar-status">
+        OBJECT STATUS: LOCKED TO QR <br>
+        <span style="font-size: 0.5rem; color: #fff;">MODEL: ANITKABIR MAUSOLEUM</span>
     </div>
 
     <div class="version-hud">
-        <div class="version-item"><span>V1.8.1</span><button onclick="openModal('v181')">INFO</button></div>
-        <div class="version-item active"><span>V1.9.0</span><button onclick="openModal('v190')">INFO</button></div>
+        <div class="version-item"><span>V1.9.0</span></div>
+        <div class="version-item active"><span>V2.0.0</span></div>
     </div>
 
-    <div id="versionModal" class="modal">
-        <div class="modal-content">
-            <span style="color:#ff0055; float:right; cursor:pointer;" onclick="closeModal()">×</span>
-            <pre id="modalText" class="ascii-table"></pre>
-        </div>
-    </div>
-
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best;">
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
         
-        <a-marker type="pattern" url="qr/pattern-ar_projesi.patt" id="targetMarker"></a-marker>
-
-        <a-entity id="world-monument" visible="false">
+        <a-marker type="pattern" url="qr/pattern-ar_projesi.patt">
             
-            <a-entity position="0 0.1 0" scale="0.4 0.4 0.4"> 
+            <a-entity position="0 0 0" scale="0.35 0.35 0.35">
                 
-                <a-box color="#707070" scale="5 0.4 4" position="0 0.2 0" shadow></a-box>
-                <a-box color="#808080" scale="4.6 0.3 3.6" position="0 0.55 0" shadow></a-box>
-                <a-box color="#909090" scale="4.2 0.3 3.2" position="0 0.85 0" shadow></a-box>
+                <a-box color="#707070" scale="5 0.3 4" position="0 0.15 0"></a-box>
+                <a-box color="#E0D8B0" scale="4 1.8 2.5" position="0 1.2 0"></a-box>
 
-                <a-box color="#E0D8B0" scale="3.5 1.8 2.2" position="0 1.9 0" shadow></a-box>
-
-                <a-box color="#C0B890" scale="3.8 0.3 2.5" position="0 2.95 0" shadow></a-box>
-                <a-box color="#A09870" scale="3.6 0.1 2.3" position="0 3.15 0" shadow></a-box>
-
-                <a-entity position="0 1.9 1.2">
-                    <a-cylinder color="#E0D8B0" height="1.8" radius="0.12" position="-1.5 0 0"></a-cylinder>
-                    <a-cylinder color="#E0D8B0" height="1.8" radius="0.12" position="-0.9 0 0"></a-cylinder>
-                    <a-cylinder color="#E0D8B0" height="1.8" radius="0.12" position="-0.3 0 0"></a-cylinder>
-                    <a-cylinder color="#E0D8B0" height="1.8" radius="0.12" position="0.3 0 0"></a-cylinder>
-                    <a-cylinder color="#E0D8B0" height="1.8" radius="0.12" position="0.9 0 0"></a-cylinder>
-                    <a-cylinder color="#E0D8B0" height="1.8" radius="0.12" position="1.5 0 0"></a-cylinder>
+                <a-entity position="0 1.2 1.4">
+                    <a-cylinder color="#E0D8B0" height="1.8" radius="0.1" position="-1.5 0 0"></a-cylinder>
+                    <a-cylinder color="#E0D8B0" height="1.8" radius="0.1" position="-0.9 0 0"></a-cylinder>
+                    <a-cylinder color="#E0D8B0" height="1.8" radius="0.1" position="-0.3 0 0"></a-cylinder>
+                    <a-cylinder color="#E0D8B0" height="1.8" radius="0.1" position="0.3 0 0"></a-cylinder>
+                    <a-cylinder color="#E0D8B0" height="1.8" radius="0.1" position="0.9 0 0"></a-cylinder>
+                    <a-cylinder color="#E0D8B0" height="1.8" radius="0.1" position="1.5 0 0"></a-cylinder>
                 </a-entity>
 
-                <a-entity position="0 1.9 -1.2">
-                    <a-cylinder color="#E0D8B0" height="1.8" radius="0.12" position="-1.5 0 0"></a-cylinder>
-                    <a-cylinder color="#E0D8B0" height="1.8" radius="0.12" position="1.5 0 0"></a-cylinder>
-                </a-entity>
+                <a-box color="#C0B890" scale="4.2 0.2 2.8" position="0 2.2 0"></a-box>
 
-                <a-cylinder color="#E0D8B0" height="1.8" radius="0.12" position="-1.6 1.9 0"></a-cylinder>
-                 <a-cylinder color="#E0D8B0" height="1.8" radius="0.12" position="1.6 1.9 0"></a-cylinder>
+                <a-text value="FURKAN KORUK" position="0 3 0" align="center" color="#00f2ff" width="6" font="exo2bold"></a-text>
 
-                <a-text value="FURKAN KORUK" position="0 3.8 0" align="center" color="#00f2ff" width="6" font="exo2bold"
-                        animation="property: opacity; from: 0.7; to: 1; dir: alternate; loop: true; dur: 2000;"></a-text>
+                <a-torus radius="2.5" radius-tubular="0.01" rotation="90 0 0" color="#00f2ff"
+                          animation="property: rotation; to: 90 360 0; loop: true; dur: 6000; easing: linear;"></a-torus>
+                <a-dodecahedron radius="2" material="wireframe: true; color: #bc13fe; opacity: 0.3"
+                                animation="property: rotation; to: 0 360 0; loop: true; dur: 15000; easing: linear;"></a-dodecahedron>
+
             </a-entity>
-            <a-dodecahedron position="0 1 0" radius="2" 
-                            material="color: #00f2ff; wireframe: true; transparent: true; opacity: 0.2;"
-                            animation="property: rotation; to: 0 -360 0; loop: true; dur: 30000; easing: linear;">
-            </a-dodecahedron>
 
-            <a-torus position="0 1.2 0" radius="2.2" radius-tubular="0.02" rotation="90 0 0" material="color: #00f2ff; emissive: #00f2ff;">
-                <a-animation attribute="rotation" to="90 360 0" dur="7000" repeat="indefinite" easing="linear"></a-animation>
-            </a-torus>
-            <a-torus position="0 1.5 0" radius="2" radius-tubular="0.02" material="color: #bc13fe; emissive: #bc13fe; opacity: 0.6">
-                <a-animation attribute="rotation" to="0 360 0" dur="9000" repeat="indefinite" easing="linear"></a-animation>
-            </a-torus>
-
-            <a-grid position="0 0 0" rotation="-90 0 0" width="4" height="4" color="#bc13fe" opacity="0.3"></a-grid>
-
-            <a-light type="point" color="#E0D8B0" intensity="1" position="2 3 2"></a-light>
-            <a-light type="ambient" color="#ffffff" intensity="0.3"></a-light>
-
-        </a-entity>
+            <a-light type="point" intensity="1.5" position="0 3 0"></a-light>
+        </a-marker>
 
         <a-entity camera></a-entity>
+        
     </a-scene>
 
-    <script>
-        const marker = document.querySelector('#targetMarker');
-        const monument = document.querySelector('#world-monument');
-        const statusDisplay = document.querySelector('#status-display');
-
-        let lastWorldPosition = new THREE.Vector3();
-        let lastWorldQuaternion = new THREE.Quaternion();
-
-        function updateAR() {
-            if (marker.object3D.visible) {
-                marker.object3D.getWorldPosition(lastWorldPosition);
-                marker.object3D.getWorldQuaternion(lastWorldQuaternion);
-                monument.object3D.position.copy(lastWorldPosition);
-                monument.object3D.quaternion.copy(lastWorldQuaternion);
-                monument.setAttribute('visible', 'true');
-                statusDisplay.innerHTML = "STATUS: ANITKABIR DEPLOYED <br> <span style='color:#33ff33;'>POSITION LOCKED</span>";
-            } else if (monument.getAttribute('visible')) {
-                statusDisplay.innerHTML = "STATUS: SIGNAL LOST <br> <span style='color:#ffbc00;'>HOLDING VIRTUAL ANCHOR</span>";
-            }
-            requestAnimationFrame(updateAR);
-        }
-        updateAR();
-
-        const versionData = {
-            'v181': `+--- CLASSIC CORE HYBRID ---+`,
-            'v190': `
-+---------------------------------------+
-| PROJECT: ANITKABIR MODEL - v1.9.0     |
-+---------------------------------------+
-| [NEW] Procedural Mausoleum Model      |
-| [NEW] Stone & Marble Color Palette    |
-| [NOTE] Built with code primitives for |
-|        maximum stability (no external |
-|        model files needed).           |
-| [KEPT] World-Space Locking Logic      |
-| [KEPT] Outer Cyber-Defense Rings      |
-+---------------------------------------+
-| STATUS: MONUMENT CONSTRUCTED          |
-+---------------------------------------+`
-        };
-
-        function openModal(ver) {
-            document.getElementById('modalText').innerText = versionData[ver];
-            document.getElementById('versionModal').style.display = "block";
-        }
-        function closeModal() { document.getElementById('versionModal').style.display = "none"; }
-    </script>
 </body>
 </html>
