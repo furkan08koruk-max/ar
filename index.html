@@ -1,142 +1,106 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Furkan Koruk | Cyber-Station v5.1</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        :root { --neon-blue: #00f2ff; --neon-purple: #bc13fe; --bg-dark: #020205; }
-        html { scroll-behavior: smooth; }
-        body { 
-            margin: 0; background: var(--bg-dark); color: white; 
-            font-family: 'Rajdhani', sans-serif; overflow-x: hidden;
-            background-image: radial-gradient(circle at 50% 50%, #101020 0%, #020205 100%);
+        /* Kamera üzerine binen 2D Arayüz (HUD) */
+        .hud-container {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 999; pointer-events: none; /* Kamerayı engellememesi için */
+            font-family: 'Orbitron', sans-serif;
         }
 
-        /* --- PANELLER --- */
-        .side-dock {
-            position: fixed; top: 0; width: 65px; height: 100vh;
-            background: rgba(10, 10, 20, 0.95); backdrop-filter: blur(10px);
-            z-index: 3000; transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex; flex-direction: column; overflow: hidden;
-            border-image: linear-gradient(to bottom, var(--neon-blue), var(--neon-purple)) 1;
+        .side-bar {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            width: 150px; background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px); border: 1px solid rgba(0, 242, 255, 0.3);
+            padding: 15px; pointer-events: auto; /* Tıklamaları yakalaması için */
         }
 
-        #left-dock { left: 0; border-right: 2px solid var(--neon-purple); }
-        #left-dock:hover { width: 260px; }
+        .left-bar { left: 10px; border-left: 3px solid #bc13fe; }
+        .right-bar { right: 10px; border-right: 3px solid #00f2ff; }
 
-        #right-dock { right: 0; border-left: 2px solid var(--neon-blue); }
-        #right-dock:hover { width: 260px; }
+        .ver-title { font-size: 0.7rem; color: #888; margin-bottom: 10px; letter-spacing: 2px; }
 
-        /* Versiyon Yazıları */
-        .ver-tag {
-            position: absolute; bottom: 20px; left: 15px;
-            font-family: 'Orbitron'; font-size: 0.6rem; color: #444;
-            letter-spacing: 2px;
-        }
-        #right-dock .ver-tag { left: auto; right: 15px; }
-
-        .dock-header {
-            writing-mode: vertical-rl; text-orientation: mixed;
-            padding: 20px 15px; color: var(--neon-blue); font-family: 'Orbitron';
-            font-size: 0.75rem; letter-spacing: 4px; height: 100%;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .side-dock:hover .dock-header { display: none; }
-
-        .dock-content { display: none; padding: 40px 20px; width: 220px; }
-        .side-dock:hover .dock-content { display: block; }
-
-        /* --- BUTON VE PROTOKOL EFEKTİ --- */
-        .item {
-            text-decoration: none; color: white; padding: 15px; margin-bottom: 12px;
-            display: block; background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1); transition: 0.3s;
-            font-family: 'Orbitron'; font-size: 0.7rem; cursor: pointer;
-            position: relative; clip-path: polygon(0 0, 100% 0, 100% 75%, 85% 100%, 0 100%);
+        .protocol-btn {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white; padding: 10px; width: 100%; margin-bottom: 8px;
+            font-size: 0.6rem; text-align: left; cursor: pointer; transition: 0.3s;
+            clip-path: polygon(0 0, 100% 0, 100% 70%, 85% 100%, 0 100%);
         }
 
-        #left-dock .item:hover { border-color: var(--neon-purple); background: rgba(188, 19, 254, 0.1); }
-        #right-dock .item:hover { border-color: var(--neon-blue); background: rgba(0, 242, 255, 0.1); }
-
-        /* Durum Yazısı Stili */
-        .status-text { font-size: 0.55rem; color: var(--neon-blue); display: block; margin-top: 5px; opacity: 0.7; }
-
-        /* --- ORTA ALAN --- */
-        section { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-        .hero-title { font-family: 'Orbitron'; font-size: 4rem; text-shadow: 0 0 20px var(--neon-blue); margin: 0; }
-
+        .protocol-btn:active { transform: scale(0.95); }
+        .status { display: block; font-size: 0.5rem; color: #00f2ff; margin-top: 4px; }
+        
+        /* Ekranın ortasındaki tarama çizgisi */
+        .scan-line {
+            position: fixed; width: 100%; height: 2px; background: rgba(0, 242, 255, 0.2);
+            top: 0; animation: scanMove 4s linear infinite; z-index: 998;
+        }
+        @keyframes scanMove { from { top: 0%; } to { top: 100%; } }
     </style>
 </head>
-<body>
 
-    <div id="left-dock" class="side-dock">
-        <div class="dock-header" style="color: var(--neon-purple);">DEV_CORE</div>
-        <div class="dock-content">
-            <a onclick="runProtocol(this, 'https://github.com')" class="item">
-                GITHUB <span class="status-text">IDLE</span>
-            </a>
-            <a onclick="runProtocol(this, 'https://visualstudio.microsoft.com')" class="item">
-                VS CODE <span class="status-text">IDLE</span>
-            </a>
-            <a onclick="runProtocol(this, '#ar-exp')" class="item">
-                AR_CORE <span class="status-text">IDLE</span>
-            </a>
+<body style="margin: 0; overflow: hidden;">
+
+    <div class="hud-container">
+        <div class="scan-line"></div>
+
+        <div class="side-bar left-bar">
+            <div class="ver-title">VERSION_1.1.1</div>
+            <button class="protocol-btn" onclick="startProtocol(this)">
+                STABLE_BUILD <span class="status">IDLE</span>
+            </button>
+            <button class="protocol-btn" onclick="startProtocol(this)">
+                LEGACY_DATA <span class="status">IDLE</span>
+            </button>
         </div>
-        <div class="ver-tag">VER_1.1.1</div>
+
+        <div class="side-bar right-bar">
+            <div class="ver-title">VERSION_1.5</div>
+            <button class="protocol-btn" onclick="startProtocol(this)">
+                EXPERIMENTAL <span class="status">IDLE</span>
+            </button>
+            <button class="protocol-btn" onclick="startProtocol(this)">
+                RENDER_PRO <span class="status">IDLE</span>
+            </button>
+        </div>
     </div>
 
-    <div id="right-dock" class="side-dock">
-        <div class="dock-header">SYSTEM_TOOLS</div>
-        <div class="dock-content">
-            <a onclick="runProtocol(this, 'https://youtube.com')" class="item">
-                YOUTUBE <span class="status-text">IDLE</span>
-            </a>
-            <a onclick="runProtocol(this, 'https://unity.com')" class="item">
-                UNITY ENGINE <span class="status-text">IDLE</span>
-            </a>
-            <a onclick="runProtocol(this, '#')" class="item">
-                SYSTEM_AI <span class="status-text">IDLE</span>
-            </a>
-        </div>
-        <div class="ver-tag">VER_1.5</div>
-    </div>
-
-    <section>
-        <h1 class="hero-title">FURKAN KORUK</h1>
-        <p style="color:var(--neon-purple); font-family:'Orbitron'; letter-spacing:10px;">PROTOCOL ACTIVE</p>
-    </section>
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+        <a-marker type="pattern" url="qr/pattern-ar_projesi.patt">
+            <a-entity position="0 0 0" scale="0.25 0.25 0.25">
+                <a-box color="#E0D8B0" scale="3.8 1.6 2.4" position="0 1 0"></a-box>
+                <a-text value="FURKAN KORUK" position="0 2.5 0" align="center" color="#00f2ff" width="6"></a-text>
+            </a-entity>
+        </a-marker>
+        <a-entity camera></a-entity>
+    </a-scene>
 
     <script>
-        function runProtocol(element, url) {
-            const status = element.querySelector('.status-text');
+        function startProtocol(btn) {
+            const status = btn.querySelector('.status');
             
-            // 1. Aşama: Initializing
+            // Initializing aşaması
             status.innerText = "INITIALIZING...";
-            status.style.color = "orange";
-
-            // 2. Aşama: Accepted & Tick (1 saniye sonra)
+            status.style.color = "#ffa500"; // Turuncu
+            
             setTimeout(() => {
+                // Accepted aşaması
                 status.innerText = "ACCEPTED ✅";
-                status.style.color = "var(--neon-blue)";
+                status.style.color = "#00f2ff"; // Neon Mavi
                 
-                // 3. Aşama: Yönlendirme (Yarım saniye sonra)
+                // 2 saniye sonra bekleme moduna döner
                 setTimeout(() => {
-                    if(url.startsWith('#')) {
-                        document.querySelector(url).scrollIntoView();
-                    } else {
-                        window.open(url, '_blank');
-                    }
-                    // Reset
                     status.innerText = "IDLE";
-                    status.style.color = "";
-                }, 800);
-                
-            }, 1200);
+                    status.style.color = "#00f2ff";
+                }, 2000);
+            }, 1500);
         }
     </script>
-
 </body>
 </html>
