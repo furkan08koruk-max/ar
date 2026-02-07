@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Furkan Koruk | Sticky-AR v1.6.0</title>
+    <title>Furkan Koruk | World-AR v1.7.0</title>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
@@ -12,7 +12,7 @@
         :root { --neon-blue: #00f2ff; --neon-purple: #bc13fe; --terminal-green: #33ff33; }
         body { margin: 0; overflow: hidden; font-family: 'Rajdhani', sans-serif; background: #000; }
 
-        /* Sağ HUD */
+        /* Sağ HUD Paneli */
         .version-hud {
             position: fixed; right: 20px; top: 50%; transform: translateY(-50%);
             z-index: 1000; display: flex; flex-direction: column; gap: 12px;
@@ -25,10 +25,11 @@
         .version-item.active { border-right-color: var(--neon-blue); box-shadow: -5px 0 15px rgba(0, 242, 255, 0.3); }
         .version-item button { background: #222; border: 1px solid var(--neon-blue); color: var(--neon-blue); cursor: pointer; font-size: 0.5rem; margin-left: 5px; }
 
+        /* AR Durum Paneli */
         .ar-status {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000;
-            background: rgba(0,0,0,0.8); color: var(--neon-blue); padding: 10px; border: 1px solid var(--neon-blue);
-            font-family: 'Orbitron'; font-size: 0.7rem; text-align: center; min-width: 250px;
+            background: rgba(0,0,0,0.8); color: var(--neon-blue); padding: 10px 20px; border: 1px solid var(--neon-blue);
+            font-family: 'Orbitron'; font-size: 0.7rem; text-align: center; min-width: 280px;
         }
 
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); }
@@ -40,13 +41,13 @@
 <body>
 
     <div id="status-display" class="ar-status">
-        WAITING FOR QR... <br>
-        <span style="font-size: 0.5rem; color: #fff;">EXTENDED TRACKING ENABLED</span>
+        SYSTEM: WAITING FOR ANCHOR... <br>
+        <span style="font-size: 0.5rem; color: #fff;">SCAN QR TO LOCK POSITION</span>
     </div>
 
     <div class="version-hud">
-        <div class="version-item"><span>V1.5.0</span><button onclick="openModal('v150')">INFO</button></div>
-        <div class="version-item active"><span>V1.6.0</span><button onclick="openModal('v160')">INFO</button></div>
+        <div class="version-item"><span>V1.6.0</span><button onclick="openModal('v160')">INFO</button></div>
+        <div class="version-item active"><span>V1.7.0</span><button onclick="openModal('v170')">INFO</button></div>
     </div>
 
     <div id="versionModal" class="modal">
@@ -56,60 +57,64 @@
         </div>
     </div>
 
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best;">
         
-        <a-marker type="pattern" url="qr/pattern-ar_projesi.patt" id="myMarker">
-            </a-marker>
+        <a-marker type="pattern" url="qr/pattern-ar_projesi.patt" id="targetMarker"></a-marker>
 
-        <a-entity id="monument" visible="false">
-            <a-box position="0 0.5 0" material="color: #00f2ff; opacity: 0.5; transparent: true;">
-                <a-box position="0 0 0" scale="0.4 1.2 0.4" material="color: #bc13fe;"></a-box>
-                <a-text value="FURKAN KORUK" position="-0.7 1.2 0" color="#00f2ff" width="4" font="exo2bold"></a-text>
-            </a-box>
-            <a-grid rotation="-90 0 0" width="1" height="1" color="#00f2ff" opacity="0.3"></a-grid>
+        <a-entity id="world-monument" visible="false">
+            <a-entity position="0 0.5 0">
+                <a-box material="color: #00f2ff; opacity: 0.5; transparent: true;">
+                    <a-box scale="0.4 1.2 0.4" material="color: #bc13fe;"></a-box>
+                    <a-text value="FURKAN KORUK" position="-0.7 1.2 0" color="#00f2ff" width="4" font="exo2bold"></a-text>
+                </a-box>
+                <a-grid rotation="-90 0 0" width="1.5" height="1.5" color="#00f2ff" opacity="0.2"></a-grid>
+            </a-entity>
         </a-entity>
 
         <a-entity camera></a-entity>
     </a-scene>
 
     <script>
-        const marker = document.querySelector('#myMarker');
-        const monument = document.querySelector('#monument');
+        const marker = document.querySelector('#targetMarker');
+        const monument = document.querySelector('#world-monument');
         const statusDisplay = document.querySelector('#status-display');
 
-        // Takip Mantığı: Marker görüldüğünde pozisyonu güncelle, kaybolduğunda dokunma!
-        marker.addEventListener('markerFound', () => {
-            statusDisplay.innerHTML = "QR DETECTED <br> <span style='color:#33ff33;'>LOCKED ON TARGET</span>";
-            monument.setAttribute('visible', true);
-        });
+        // Hafıza değişkenleri
+        let lastWorldPosition = new THREE.Vector3();
+        let lastWorldQuaternion = new THREE.Quaternion();
 
-        marker.addEventListener('markerLost', () => {
-            statusDisplay.innerHTML = "QR LOST <br> <span style='color:#ffbc00;'>RETAINING LAST POSITION</span>";
-            // Burada visible: false YAPMIYORUZ! Böylece obje ekranda kalmaya devam ediyor.
-        });
-
-        // Her karede objeyi marker'ın üzerine taşı (eğer marker görünüyorsa)
-        function tick() {
+        function updateAR() {
             if (marker.object3D.visible) {
-                monument.object3D.position.copy(marker.object3D.position);
-                monument.object3D.rotation.copy(marker.object3D.rotation);
+                // Marker görünürse, dünya koordinatlarını çek ve nesneyi oraya "çivile"
+                marker.object3D.getWorldPosition(lastWorldPosition);
+                marker.object3D.getWorldQuaternion(lastWorldQuaternion);
+
+                monument.object3D.position.copy(lastWorldPosition);
+                monument.object3D.quaternion.copy(lastWorldQuaternion);
+                
+                monument.setAttribute('visible', 'true');
+                statusDisplay.innerHTML = "STATUS: ANCHOR LOCKED <br> <span style='color:#33ff33;'>POSITION FIXED IN WORLD SPACE</span>";
+            } else if (monument.getAttribute('visible')) {
+                // Marker kaybolsa bile, nesne en son atanan koordinatlarda kalmaya devam eder.
+                statusDisplay.innerHTML = "STATUS: SCANNER LOST <br> <span style='color:#ffbc00;'>RETAINING WORLD COORDINATES</span>";
             }
-            requestAnimationFrame(tick);
+            requestAnimationFrame(updateAR);
         }
-        tick();
+        updateAR();
 
         const versionData = {
-            'v150': `+--- STATIC MODE ACTIVE ---+`,
-            'v160': `
+            'v160': `+--- EXTENDED TRACKING INTRO ---+`,
+            'v170': `
 +---------------------------------------+
-| STICKY AR UPDATE - v1.6.0             |
+| WORLD-SPACE ANCHOR - v1.7.0           |
 +---------------------------------------+
-| [NEW] Extended Tracking Hack          |
-| [NEW] World-Space Rendering           |
-| [INFO] Object stays after QR is lost  |
-| [FIXED] Sudden disappearing bug       |
+| [NEW] Three.js Matrix Transformation  |
+| [NEW] World Position Memory           |
+| [FIX] Anti-Camera Attachment          |
+| [INFO] Object stays on the desk even  |
+|        if you look away from the QR.  |
 +---------------------------------------+
-| STATUS: PERMANENT OBJECT ACTIVE       |
+| STATUS: SPATIAL PERSISTENCE ACTIVE    |
 +---------------------------------------+`
         };
 
