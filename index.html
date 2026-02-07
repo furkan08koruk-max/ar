@@ -1,74 +1,33 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Furkan Koruk | Anıtkabir AR v2.2.0</title>
-    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+<a-marker type="pattern" url="qr/pattern-ar_projesi.patt">
     
-    <style>
-        :root { --neon-blue: #00f2ff; --neon-purple: #bc13fe; }
-        body { margin: 0; overflow: hidden; font-family: 'Rajdhani', sans-serif; background: #000; }
-
-        /* Üst Durum Paneli */
-        .ar-status {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000;
-            background: rgba(0,0,0,0.8); color: var(--neon-blue); padding: 10px 20px; border: 1px solid var(--neon-blue);
-            font-family: 'Orbitron'; font-size: 0.7rem; text-align: center; min-width: 250px;
-            pointer-events: none;
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="ar-status">
-        SYSTEM: LOCKED TO MARKER <br>
-        <span style="font-size: 0.5rem; color: #fff;">MODEL: ANITKABIR MAUSOLEUM v2.2.0</span>
-    </div>
-
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+    <a-entity position="0 0 0" scale="0.25 0.25 0.25">
         
-        <a-marker type="pattern" url="qr/pattern-ar_projesi.patt">
-            
-            <a-entity position="0 0 0" scale="0.25 0.25 0.25">
-                
-                <a-box color="#707070" scale="5 0.2 4" position="0 0.1 0"></a-box>
-                <a-box color="#909090" scale="4.5 0.2 3.5" position="0 0.3 0"></a-box>
+        <a-box color="#8c8c8c" scale="5 0.1 4" position="0 0.05 0"></a-box>
+        <a-box color="#a6a6a6" scale="4.6 0.1 3.6" position="0 0.15 0"></a-box>
 
-                <a-box color="#E0D8B0" scale="3.8 1.6 2.4" position="0 1.2 0"></a-box>
+        <a-box color="#E0D8B0" scale="3.8 1.6 2.4" position="0 1 0"></a-box>
 
-                <a-entity position="0 1.2 1.3">
-                    <a-cylinder color="#E0D8B0" height="1.6" radius="0.08" position="-1.5 0 0"></a-cylinder>
-                    <a-cylinder color="#E0D8B0" height="1.6" radius="0.08" position="-0.9 0 0"></a-cylinder>
-                    <a-cylinder color="#E0D8B0" height="1.6" radius="0.08" position="-0.3 0 0"></a-cylinder>
-                    <a-cylinder color="#E0D8B0" height="1.6" radius="0.08" position="0.3 0 0"></a-cylinder>
-                    <a-cylinder color="#E0D8B0" height="1.6" radius="0.08" position="0.9 0 0"></a-cylinder>
-                    <a-cylinder color="#E0D8B0" height="1.6" radius="0.08" position="1.5 0 0"></a-cylinder>
-                </a-entity>
+        <a-entity position="0 1 1.3">
+            <a-cylinder color="#D1C9A3" height="1.6" radius="0.08" position="-1.5 0 0"></a-cylinder>
+            <a-cylinder color="#D1C9A3" height="1.6" radius="0.08" position="-0.9 0 0"></a-cylinder>
+            <a-cylinder color="#D1C9A3" height="1.6" radius="0.08" position="-0.3 0 0"></a-cylinder>
+            <a-cylinder color="#D1C9A3" height="1.6" radius="0.08" position="0.3 0 0"></a-cylinder>
+            <a-cylinder color="#D1C9A3" height="1.6" radius="0.08" position="0.9 0 0"></a-cylinder>
+            <a-cylinder color="#D1C9A3" height="1.6" radius="0.08" position="1.5 0 0"></a-cylinder>
+        </a-entity>
 
-                <a-box color="#C0B890" scale="4 0.2 2.6" position="0 2.1 0"></a-box>
+        <a-entity position="0 1 -1.3">
+            <a-cylinder color="#D1C9A3" height="1.6" radius="0.08" position="-1.5 0 0"></a-cylinder>
+            <a-cylinder color="#D1C9A3" height="1.6" radius="0.08" position="1.5 0 0"></a-cylinder>
+        </a-entity>
 
-                <a-text value="FURKAN KORUK" position="0 2.8 0" align="center" color="#00f2ff" width="6" font="exo2bold"></a-text>
+        <a-box color="#C0B890" scale="4 0.15 2.6" position="0 1.85 0"></a-box>
 
-                <a-torus radius="2.8" radius-tubular="0.01" rotation="90 0 0" color="#00f2ff"
-                          animation="property: rotation; to: 90 360 0; loop: true; dur: 10000; easing: linear;"></a-torus>
-                
-                <a-dodecahedron radius="2.2" material="wireframe: true; color: #bc13fe; opacity: 0.2"
-                                animation="property: rotation; to: 0 -360 0; loop: true; dur: 20000; easing: linear;"></a-dodecahedron>
+        <a-text value="FURKAN KORUK" position="0 2.5 0" align="center" color="#00f2ff" width="6" font="exo2bold"></a-text>
 
-            </a-entity>
+    </a-entity>
 
-            <a-light type="ambient" color="#fff" intensity="0.8"></a-light>
-            <a-light type="point" intensity="1" position="0 4 0"></a-light>
-            
-        </a-marker>
-
-        <a-entity camera></a-entity>
-        
-    </a-scene>
-
-</body>
-</html>
+    <a-light type="ambient" color="#fff" intensity="0.9"></a-light>
+    <a-light type="directional" position="1 2 1" intensity="0.5"></a-light>
+    
+</a-marker>
