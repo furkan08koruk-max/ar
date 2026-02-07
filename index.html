@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Furkan Koruk | World-AR v1.7.0</title>
+    <title>Furkan Koruk | Cyber-Core v1.8.0</title>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
@@ -41,13 +41,13 @@
 <body>
 
     <div id="status-display" class="ar-status">
-        SYSTEM: WAITING FOR ANCHOR... <br>
-        <span style="font-size: 0.5rem; color: #fff;">SCAN QR TO LOCK POSITION</span>
+        SYSTEM: WAITING FOR SIGNAL... <br>
+        <span style="font-size: 0.5rem; color: #fff;">SCAN QR TO DEPLOY CYBER CORE</span>
     </div>
 
     <div class="version-hud">
-        <div class="version-item"><span>V1.6.0</span><button onclick="openModal('v160')">INFO</button></div>
-        <div class="version-item active"><span>V1.7.0</span><button onclick="openModal('v170')">INFO</button></div>
+        <div class="version-item"><span>V1.7.0</span><button onclick="openModal('v170')">INFO</button></div>
+        <div class="version-item active"><span>V1.8.0</span><button onclick="openModal('v180')">INFO</button></div>
     </div>
 
     <div id="versionModal" class="modal">
@@ -62,13 +62,32 @@
         <a-marker type="pattern" url="qr/pattern-ar_projesi.patt" id="targetMarker"></a-marker>
 
         <a-entity id="world-monument" visible="false">
-            <a-entity position="0 0.5 0">
-                <a-box material="color: #00f2ff; opacity: 0.5; transparent: true;">
-                    <a-box scale="0.4 1.2 0.4" material="color: #bc13fe;"></a-box>
-                    <a-text value="FURKAN KORUK" position="-0.7 1.2 0" color="#00f2ff" width="4" font="exo2bold"></a-text>
-                </a-box>
-                <a-grid rotation="-90 0 0" width="1.5" height="1.5" color="#00f2ff" opacity="0.2"></a-grid>
-            </a-entity>
+            
+            <a-cone position="0 0.7 0" radius-bottom="0.4" radius-top="0.1" height="1.2" 
+                    material="color: #bc13fe; wireframe: true; emissive: #bc13fe; emissiveIntensity: 2;">
+            </a-cone>
+
+            <a-dodecahedron position="0 0.7 0" radius="0.8" 
+                            material="color: #00f2ff; wireframe: true; transparent: true; opacity: 0.5;"
+                            animation="property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear;">
+            </a-dodecahedron>
+
+            <a-torus position="0 0.5 0" radius="1" radius-tubular="0.02" rotation="90 0 0" material="color: #00f2ff; emissive: #00f2ff;">
+                <a-animation attribute="rotation" to="90 360 0" dur="5000" repeat="indefinite" easing="linear"></a-animation>
+            </a-torus>
+            <a-torus position="0 0.7 0" radius="0.9" radius-tubular="0.02" material="color: #bc13fe; emissive: #bc13fe; opacity: 0.7">
+                <a-animation attribute="rotation" to="0 360 0" dur="7000" repeat="indefinite" easing="linear"></a-animation>
+            </a-torus>
+
+            <a-text value="FURKAN KORUK" position="-0.8 1.6 0" color="#00f2ff" width="5" font="exo2bold"
+                    animation="property: opacity; from: 0.5; to: 1; dir: alternate; loop: true; dur: 1500;"></a-text>
+            <a-text value="SYSTEM ARCHITECT" position="-0.5 1.4 0" color="#bc13fe" width="3" font="roboto"></a-text>
+            
+            <a-ring position="0 0.05 0" rotation="-90 0 0" radius-inner="0.5" radius-outer="1.2" material="color: #00f2ff; wireframe: true;"></a-ring>
+            <a-grid position="0 0 0" rotation="-90 0 0" width="2" height="2" color="#bc13fe" opacity="0.4"></a-grid>
+
+            <a-light type="point" color="#00f2ff" intensity="1.5" position="0 1 0"></a-light>
+
         </a-entity>
 
         <a-entity camera></a-entity>
@@ -79,42 +98,37 @@
         const monument = document.querySelector('#world-monument');
         const statusDisplay = document.querySelector('#status-display');
 
-        // Hafıza değişkenleri
         let lastWorldPosition = new THREE.Vector3();
         let lastWorldQuaternion = new THREE.Quaternion();
 
         function updateAR() {
             if (marker.object3D.visible) {
-                // Marker görünürse, dünya koordinatlarını çek ve nesneyi oraya "çivile"
                 marker.object3D.getWorldPosition(lastWorldPosition);
                 marker.object3D.getWorldQuaternion(lastWorldQuaternion);
-
                 monument.object3D.position.copy(lastWorldPosition);
                 monument.object3D.quaternion.copy(lastWorldQuaternion);
-                
                 monument.setAttribute('visible', 'true');
-                statusDisplay.innerHTML = "STATUS: ANCHOR LOCKED <br> <span style='color:#33ff33;'>POSITION FIXED IN WORLD SPACE</span>";
+                statusDisplay.innerHTML = "STATUS: CYBER CORE DEPLOYED <br> <span style='color:#33ff33;'>POSITION LOCKED</span>";
             } else if (monument.getAttribute('visible')) {
-                // Marker kaybolsa bile, nesne en son atanan koordinatlarda kalmaya devam eder.
-                statusDisplay.innerHTML = "STATUS: SCANNER LOST <br> <span style='color:#ffbc00;'>RETAINING WORLD COORDINATES</span>";
+                statusDisplay.innerHTML = "STATUS: SIGNAL LOST <br> <span style='color:#ffbc00;'>HOLDING VIRTUAL ANCHOR</span>";
             }
             requestAnimationFrame(updateAR);
         }
         updateAR();
 
         const versionData = {
-            'v160': `+--- EXTENDED TRACKING INTRO ---+`,
-            'v170': `
+            'v170': `+--- WORLD ANCHOR LOGIC ---+`,
+            'v180': `
 +---------------------------------------+
-| WORLD-SPACE ANCHOR - v1.7.0           |
+| CYBER-CORE VISUAL UPGRADE - v1.8.0    |
 +---------------------------------------+
-| [NEW] Three.js Matrix Transformation  |
-| [NEW] World Position Memory           |
-| [FIX] Anti-Camera Attachment          |
-| [INFO] Object stays on the desk even  |
-|        if you look away from the QR.  |
+| [NEW] Central Data Spire (Cone)       |
+| [NEW] Wireframe Force Field (Dodec)   |
+| [NEW] Dual Rotating Energy Rings      |
+| [NEW] Dynamic Glowing Text Labels     |
+| [NEW] Point Light Source Added        |
 +---------------------------------------+
-| STATUS: SPATIAL PERSISTENCE ACTIVE    |
+| NOTE: Logic remains World-Space fixed |
 +---------------------------------------+`
         };
 
