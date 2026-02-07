@@ -8,92 +8,77 @@
     
     <style>
         body { margin: 0; overflow: hidden; font-family: 'Orbitron', sans-serif; }
-
-        .hud-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 9999; pointer-events: none;
-        }
-
-        /* --- KÜÇÜK VERSİYON ETİKETLERİ --- */
+        .hud-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; pointer-events: none; }
         .ver-tag {
-            position: absolute; top: 20px;
-            padding: 10px 15px; background: rgba(0, 0, 0, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white; font-size: 0.7rem; letter-spacing: 2px;
-            pointer-events: auto; cursor: pointer; transition: 0.3s;
-            min-width: 100px; text-align: center;
+            position: absolute; top: 25px; padding: 10px 15px; background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2); color: white; font-size: 0.7rem;
+            pointer-events: auto; cursor: pointer; min-width: 100px; text-align: center;
         }
-
-        /* Sol Etiket v1.1 */
-        .left-tag {
-            left: 10px; border-left: 4px solid #bc13fe;
-            clip-path: polygon(0 0, 100% 0, 100% 70%, 85% 100%, 0 100%);
-        }
-
-        /* Sağ Etiket v1.5 */
-        .right-tag {
-            right: 10px; border-right: 4px solid #00f2ff;
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 15% 100%, 0 70%);
-        }
-
-        .status-msg {
-            display: block; font-size: 0.5rem; margin-top: 5px;
-            color: #888; text-transform: uppercase;
-        }
-
-        /* Tarama Çizgisi */
-        .scanline {
-            position: absolute; width: 100%; height: 2px; background: rgba(0, 242, 255, 0.15);
-            box-shadow: 0 0 8px rgba(0, 242, 255, 0.4);
-            animation: scan 5s linear infinite; pointer-events: none;
-        }
-        @keyframes scan { from { top: 0%; } to { top: 100%; } }
+        .left-tag { left: 15px; border-left: 4px solid #bc13fe; }
+        .right-tag { right: 15px; border-right: 4px solid #00f2ff; }
+        .status-msg { display: block; font-size: 0.5rem; margin-top: 5px; color: #888; }
     </style>
 </head>
 
 <body>
     <div class="hud-overlay">
-        <div class="scanline"></div>
-
-        <div class="ver-tag left-tag" onclick="runVerProtocol(this, 'v 1.1')">
-            v 1.1
-            <span class="status-msg">READY</span>
-        </div>
-
-        <div class="ver-tag right-tag" onclick="runVerProtocol(this, 'v 1.5')">
-            v 1.5
-            <span class="status-msg">READY</span>
-        </div>
+        <div class="ver-tag left-tag" onclick="runProtocol(this)">v 1.1 <span class="status-msg">READY</span></div>
+        <div class="ver-tag right-tag" onclick="runProtocol(this)">v 1.5 <span class="status-msg">READY</span></div>
     </div>
 
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
         <a-marker type="pattern" url="qr/pattern-ar_projesi.patt">
-            <a-entity position="0 0 0" scale="0.25 0.25 0.25">
-                <a-box color="#E0D8B0" scale="3.8 1.6 2.4" position="0 1 0"></a-box>
-                <a-text value="FURKAN KORUK" position="0 2.5 0" align="center" color="#00f2ff" width="6"></a-text>
+            
+            <a-entity position="0 0 0" scale="0.2 0.2 0.2">
+                
+                <a-box color="#888" scale="8 0.2 6" position="0 -0.1 0"></a-box>
+
+                <a-box color="#E0D8B0" scale="4 1.5 2.5" position="0 0.75 0"></a-box>
+
+                <a-entity position="0 0.75 1.3">
+                    <a-cylinder color="#D1C9A3" radius="0.06" height="1.5" position="-1.8 0 0"></a-cylinder>
+                    <a-cylinder color="#D1C9A3" radius="0.06" height="1.5" position="-1.4 0 0"></a-cylinder>
+                    <a-cylinder color="#D1C9A3" radius="0.06" height="1.5" position="-1.0 0 0"></a-cylinder>
+                    <a-cylinder color="#D1C9A3" radius="0.06" height="1.5" position="-0.6 0 0"></a-cylinder>
+                    <a-cylinder color="#D1C9A3" radius="0.06" height="1.5" position="-0.2 0 0"></a-cylinder>
+                    <a-cylinder color="#D1C9A3" radius="0.06" height="1.5" position="0.2 0 0"></a-cylinder>
+                    <a-cylinder color="#D1C9A3" radius="0.06" height="1.5" position="0.6 0 0"></a-cylinder>
+                    <a-cylinder color="#D1C9A3" radius="0.06" height="1.5" position="1.0 0 0"></a-cylinder>
+                    <a-cylinder color="#D1C9A3" radius="0.06" height="1.5" position="1.4 0 0"></a-cylinder>
+                    <a-cylinder color="#D1C9A3" radius="0.06" height="1.5" position="1.8 0 0"></a-cylinder>
+                </a-entity>
+
+                <a-box color="#D1C9A3" scale="2 1.2 1.8" position="-3 0.6 0.2"></a-box>
+                <a-box color="#C0B890" scale="2.2 0.1 2" position="-3 1.25 0.2"></a-box>
+
+                <a-entity position="1.5 0 2.2">
+                    <a-box color="#B0A880" scale="2 0.1 0.3" position="0 0.05 0"></a-box>
+                    <a-box color="#B0A880" scale="2 0.1 0.3" position="0 0.15 -0.2"></a-box>
+                    <a-box color="#B0A880" scale="2 0.1 0.3" position="0 0.25 -0.4"></a-box>
+                </a-entity>
+
+                <a-box color="#C0B890" scale="4.2 0.1 2.7" position="0 1.55 0"></a-box>
+
+                <a-text value="FURKAN KORUK" position="0 2.5 0" align="center" color="#00f2ff" width="10" font="exo2bold"></a-text>
+
             </a-entity>
+
+            <a-light type="ambient" intensity="0.8"></a-light>
+            <a-light type="directional" position="1 5 3" intensity="0.7"></a-light>
+
         </a-marker>
         <a-entity camera></a-entity>
     </a-scene>
 
     <script>
-        function runVerProtocol(el, verName) {
+        function runProtocol(el) {
             const status = el.querySelector('.status-msg');
-            
-            // Initializing
             status.innerText = "INITIALIZING...";
             status.style.color = "#ffa500";
-
             setTimeout(() => {
-                // Accepted
                 status.innerText = "ACCEPTED ✅";
                 status.style.color = "#00f2ff";
-                
-                setTimeout(() => {
-                    // Reset to Ready
-                    status.innerText = "READY";
-                    status.style.color = "#888";
-                }, 2000);
+                setTimeout(() => { status.innerText = "READY"; status.style.color = "#888"; }, 2000);
             }, 1200);
         }
     </script>
