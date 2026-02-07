@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Furkan Koruk | Cyber-Core v1.8.0</title>
+    <title>Furkan Koruk | Classic-Core v1.8.1</title>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
@@ -42,12 +42,12 @@
 
     <div id="status-display" class="ar-status">
         SYSTEM: WAITING FOR SIGNAL... <br>
-        <span style="font-size: 0.5rem; color: #fff;">SCAN QR TO DEPLOY CYBER CORE</span>
+        <span style="font-size: 0.5rem; color: #fff;">SCAN QR TO DEPLOY CLASSIC CORE</span>
     </div>
 
     <div class="version-hud">
-        <div class="version-item"><span>V1.7.0</span><button onclick="openModal('v170')">INFO</button></div>
-        <div class="version-item active"><span>V1.8.0</span><button onclick="openModal('v180')">INFO</button></div>
+        <div class="version-item"><span>V1.8.0</span><button onclick="openModal('v180')">INFO</button></div>
+        <div class="version-item active"><span>V1.8.1</span><button onclick="openModal('v181')">INFO</button></div>
     </div>
 
     <div id="versionModal" class="modal">
@@ -63,30 +63,29 @@
 
         <a-entity id="world-monument" visible="false">
             
-            <a-cone position="0 0.7 0" radius-bottom="0.4" radius-top="0.1" height="1.2" 
-                    material="color: #bc13fe; wireframe: true; emissive: #bc13fe; emissiveIntensity: 2;">
-            </a-cone>
-
-            <a-dodecahedron position="0 0.7 0" radius="0.8" 
-                            material="color: #00f2ff; wireframe: true; transparent: true; opacity: 0.5;"
-                            animation="property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear;">
+            <a-box position="0 0.7 0" material="color: #00f2ff; opacity: 0.6; transparent: true;" 
+                   animation="property: rotation; to: 0 360 0; loop: true; dur: 5000">
+                
+                <a-box position="0 0 0" scale="0.5 0.5 0.5" material="color: #bc13fe; emissive: #bc13fe; emissiveIntensity: 0.5;"></a-box>
+                
+                <a-text value="FURKAN KORUK" position="-0.7 0.8 0" color="#00f2ff" width="3" font="exo2bold"></a-text>
+            </a-box>
+            <a-dodecahedron position="0 0.7 0" radius="1.3" 
+                            material="color: #00f2ff; wireframe: true; transparent: true; opacity: 0.3;"
+                            animation="property: rotation; to: 0 -360 0; loop: true; dur: 25000; easing: linear;">
             </a-dodecahedron>
 
-            <a-torus position="0 0.5 0" radius="1" radius-tubular="0.02" rotation="90 0 0" material="color: #00f2ff; emissive: #00f2ff;">
+            <a-torus position="0 0.7 0" radius="1.5" radius-tubular="0.02" rotation="90 0 0" material="color: #00f2ff; emissive: #00f2ff;">
                 <a-animation attribute="rotation" to="90 360 0" dur="5000" repeat="indefinite" easing="linear"></a-animation>
             </a-torus>
-            <a-torus position="0 0.7 0" radius="0.9" radius-tubular="0.02" material="color: #bc13fe; emissive: #bc13fe; opacity: 0.7">
+            <a-torus position="0 0.7 0" radius="1.4" radius-tubular="0.02" material="color: #bc13fe; emissive: #bc13fe; opacity: 0.7">
                 <a-animation attribute="rotation" to="0 360 0" dur="7000" repeat="indefinite" easing="linear"></a-animation>
             </a-torus>
 
-            <a-text value="FURKAN KORUK" position="-0.8 1.6 0" color="#00f2ff" width="5" font="exo2bold"
-                    animation="property: opacity; from: 0.5; to: 1; dir: alternate; loop: true; dur: 1500;"></a-text>
-            <a-text value="SYSTEM ARCHITECT" position="-0.5 1.4 0" color="#bc13fe" width="3" font="roboto"></a-text>
-            
-            <a-ring position="0 0.05 0" rotation="-90 0 0" radius-inner="0.5" radius-outer="1.2" material="color: #00f2ff; wireframe: true;"></a-ring>
-            <a-grid position="0 0 0" rotation="-90 0 0" width="2" height="2" color="#bc13fe" opacity="0.4"></a-grid>
+            <a-ring position="0 0.05 0" rotation="-90 0 0" radius-inner="0.5" radius-outer="1.6" material="color: #00f2ff; wireframe: true;"></a-ring>
+            <a-grid position="0 0 0" rotation="-90 0 0" width="3" height="3" color="#bc13fe" opacity="0.4"></a-grid>
 
-            <a-light type="point" color="#00f2ff" intensity="1.5" position="0 1 0"></a-light>
+            <a-light type="point" color="#00f2ff" intensity="1.5" position="0 1.5 0"></a-light>
 
         </a-entity>
 
@@ -108,7 +107,7 @@
                 monument.object3D.position.copy(lastWorldPosition);
                 monument.object3D.quaternion.copy(lastWorldQuaternion);
                 monument.setAttribute('visible', 'true');
-                statusDisplay.innerHTML = "STATUS: CYBER CORE DEPLOYED <br> <span style='color:#33ff33;'>POSITION LOCKED</span>";
+                statusDisplay.innerHTML = "STATUS: CLASSIC CORE DEPLOYED <br> <span style='color:#33ff33;'>POSITION LOCKED</span>";
             } else if (monument.getAttribute('visible')) {
                 statusDisplay.innerHTML = "STATUS: SIGNAL LOST <br> <span style='color:#ffbc00;'>HOLDING VIRTUAL ANCHOR</span>";
             }
@@ -117,18 +116,17 @@
         updateAR();
 
         const versionData = {
-            'v170': `+--- WORLD ANCHOR LOGIC ---+`,
-            'v180': `
+            'v180': `+--- CYBER VISUALS INTRO ---+`,
+            'v181': `
 +---------------------------------------+
-| CYBER-CORE VISUAL UPGRADE - v1.8.0    |
+| CLASSIC CORE RETROFIT - v1.8.1        |
 +---------------------------------------+
-| [NEW] Central Data Spire (Cone)       |
-| [NEW] Wireframe Force Field (Dodec)   |
-| [NEW] Dual Rotating Energy Rings      |
-| [NEW] Dynamic Glowing Text Labels     |
-| [NEW] Point Light Source Added        |
+| [RESTORED] Original Rotating Cubes    |
+| [RESTORED] Attached Name Text         |
+| [KEPT] Outer Cyber-Rings & Shield     |
+| [KEPT] World-Space Locking Logic      |
 +---------------------------------------+
-| NOTE: Logic remains World-Space fixed |
+| STATUS: HYBRID DESIGN ACTIVE          |
 +---------------------------------------+`
         };
 
